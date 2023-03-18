@@ -14,7 +14,7 @@ class _ScreenColorsState extends State<ScreenColors> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: colorValue == 0 ? Colors.red : Colors.green,
+        color: colorValue == 0 ? Colors.red : Colors.black,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -29,7 +29,7 @@ class _ScreenColorsState extends State<ScreenColors> {
                 setState(() {
                   colorValue = 1;  
                 });
-              }), child: const Text("Green"))
+              }), child: const Text("Black"))
             ],
           ),
         ),
