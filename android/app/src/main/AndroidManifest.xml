@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.cicdsample">
+    package="com.colors.cicdsample">
    <application
-        android:label="cicdsample"
+        android:label="Colors App"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

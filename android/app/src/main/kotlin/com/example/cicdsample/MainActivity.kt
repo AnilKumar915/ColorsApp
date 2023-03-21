@@ -1,4 +1,4 @@
-package com.example.cicdsample
+package com.colors.cicdsample
 
 import io.flutter.embedding.android.FlutterActivity
 
