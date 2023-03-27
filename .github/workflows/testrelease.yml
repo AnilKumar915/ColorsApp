@@ -1,3 +1,9 @@
+# name: Release Build
+# on:
+#   push:
+#     tags:
+#       - 'v*'
+
 name: testrelease
 
 on:
