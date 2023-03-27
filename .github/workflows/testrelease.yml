@@ -103,7 +103,7 @@ jobs:
         path: build/app/outputs/bundle/release/app-release.aab
   release:
     name: Release app to internal track
-    # needs: [ build ]
+    needs: [ build ]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
