@@ -68,6 +68,7 @@ jobs:
     - uses: subosito/flutter-action@v2
       with:
         flutter-version: '3.3.2'
+    - run: flutter clean
     - run: flutter pub get
     # - run: flutter test
     # - run: flutter build apk --release --split-per-abi
