@@ -90,4 +90,4 @@ jobs:
         packageName: com.fluttercicddemo
         releaseFile: app-release.aab
         track: internal
-        whatsNewDirectory: distribution/whatsnew
+        status: completed
