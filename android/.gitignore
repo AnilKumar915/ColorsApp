@@ -11,4 +11,4 @@ GeneratedPluginRegistrant.java
 # key.properties
 # app/upload-keystore.jks
 **/*.keystore
-**/*.jks
+# **/*.jks
