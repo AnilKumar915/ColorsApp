@@ -88,11 +88,6 @@ jobs:
         channel: 'stable'    
         flutter-version: '3.3.2'
         cache: true
-    - name: Download bundle dependencies
-      run: |
-        gem install bundler:2.0.2
-        bundle config path vendor/bundle
-        bundle install
     - run: flutter clean
     - run: flutter pub get
     # - run: flutter test
@@ -115,7 +110,7 @@ jobs:
     needs: [ build ]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    # - uses: actions/checkout@v1
     - name: Get appbundle from artifacts
       uses: actions/download-artifact@v2
       with:
@@ -125,6 +120,7 @@ jobs:
       with:
         serviceAccountJsonPlainText: ${{ secrets.PLAYSTORE_ACCOUNT_KEY }}
         packageName: com.colors.cicdsample
-        releaseFiles: "build/app/outputs/bundle/release/app-release.aab"
+        releaseFiles: app-release.aab
         track: internal
         status: completed
+        whatsNewDirectory: distribution/whatsnew
