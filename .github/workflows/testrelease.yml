@@ -98,7 +98,7 @@ jobs:
       with:
         artifacts: "build/app/outputs/bundle/release/app-release.aab"
         token: ${{ secrets.GH_TOKEN }}
-        tag:  '1.0.9' #${{ steps.version.outputs.content }}
+        tag:  '1.0.10' #${{ steps.version.outputs.content }}
         commit: ${{ github.sha }}
     - name: Upload app bundle
       uses: actions/upload-artifact@v2
@@ -123,4 +123,3 @@ jobs:
         releaseFiles: app-release.aab
         track: internal
         status: completed
-        whatsNewDirectory: distribution/whatsnew
