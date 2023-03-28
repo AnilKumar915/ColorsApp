@@ -116,6 +116,6 @@ jobs:
       with:
         serviceAccountJsonPlainText: ${{ secrets.PLAYSTORE_ACCOUNT_KEY }}
         packageName: com.colors.cicdsample
-        releaseFiles: build/app/outputs/bundle/release/app-release.aab
-        track: production
+        releaseFiles: ColorsApp/releases/tag/1.0.5/app-release.aab
+        track: internal
         status: completed
