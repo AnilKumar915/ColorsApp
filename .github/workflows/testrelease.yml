@@ -88,7 +88,11 @@ jobs:
         channel: 'stable'    
         flutter-version: '3.3.2'
         cache: true
-
+    - name: Download bundle dependencies
+      run: |
+        gem install bundler:2.0.2
+        bundle config path vendor/bundle
+        bundle install
     - run: flutter clean
     - run: flutter pub get
     # - run: flutter test
@@ -99,18 +103,13 @@ jobs:
       with:
         artifacts: "build/app/outputs/bundle/release/app-release.aab"
         token: ${{ secrets.GH_TOKEN }}
-        tag:  '1.0.8' #${{ steps.version.outputs.content }}
+        tag:  '1.0.9' #${{ steps.version.outputs.content }}
         commit: ${{ github.sha }}
     - name: Upload app bundle
       uses: actions/upload-artifact@v2
       with:
         name: appbundle
         path: build/app/outputs/bundle/release/app-release.aab
-    - name: Download bundle dependencies
-      run: |
-        gem install bundler:2.0.2
-        bundle config path vendor/bundle
-        bundle install
   release:
     name: Release app to internal track
     needs: [ build ]
