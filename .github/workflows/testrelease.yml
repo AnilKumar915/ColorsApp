@@ -55,6 +55,13 @@ jobs:
         run: |
           pip3 install codemagic-cli-tools
 
+      - name: "Download AppStore P12 Certificate"
+        id: apptstore_p12_cert
+        uses: timheuer/base64-to-file@v1.2
+        with:
+          fileName: appstore_cert.p12
+          encodedString: ${{ secrets.APPSTORE_P12_FILE }}
+
       # - name: Get version.txt
       #   uses: actions/download-artifact@v2
       #   with:
