@@ -75,6 +75,8 @@ jobs:
       - name: "Setup AppStore dependencies"
         run: |
           keychain initialize
+          keychain add-certificates
+          xcode-project use-profiles
 
       # - name: "Build iOS release"
       #   run: |
