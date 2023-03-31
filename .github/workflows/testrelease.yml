@@ -80,7 +80,7 @@ jobs:
         run: |
           pod repo update
           find . -name "Podfile" -execdir pod install \;
-          flutter build ipa
+          flutter build ipa --release --export-options-plist=$HOME/export_options.plist
 
       # - name: Get version.txt
       #   uses: actions/download-artifact@v2
