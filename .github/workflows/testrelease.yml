@@ -72,6 +72,22 @@ jobs:
           fileName: appstore_cert.p12
           encodedString: ${{ secrets.APPSTORE_P12_FILE }}
 
+      - name: "Setup AppStore dependencies"
+        run: |
+          keychain initialize
+          app-store-connect fetch-signing-files \
+            --issuer-id=${{ secrets.ES_APPSTORE_ISSUER_ID }} \
+            --key-id=${{ secrets.ES_APPSTORE_KEY_ID }} \
+            --private-key=@file:${{ steps.apptstore_private_key.outputs.filePath }} \
+            --certificate-key=@file:$HOME/appstore_signing_cert.key \
+            --strict-match-identifier \
+            --platform=IOS \
+            --type=IOS_APP_STORE \
+            --create \
+            $(xcode-project detect-bundle-id)
+          keychain add-certificates
+          xcode-project use-profiles
+
       - name: "Build iOS release"
         run: |
           pod deintegrate
