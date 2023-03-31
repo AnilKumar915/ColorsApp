@@ -72,9 +72,13 @@ jobs:
           fileName: appstore_cert.p12
           encodedString: ${{ secrets.APPSTORE_P12_FILE }}
 
-      - name: "Setup AppStore dependencies"
+      # - name: "Setup AppStore dependencies"
+      #   run: |
+      #     keychain initialize
+
+      - name: "Build iOS release"
         run: |
-          keychain initialize
+          pod repo update
 
       # - name: Get version.txt
       #   uses: actions/download-artifact@v2
