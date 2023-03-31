@@ -74,7 +74,7 @@ jobs:
 
       - name: "Build iOS release"
         run: |
-          pod repo update
+          pod deintegrate
 
       # - name: Get version.txt
       #   uses: actions/download-artifact@v2
