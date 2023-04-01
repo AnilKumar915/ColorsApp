@@ -86,6 +86,7 @@ jobs:
             --issuer-id=${{ secrets.ES_APPSTORE_ISSUER_ID }} \
             --key-id=${{ secrets.ES_APPSTORE_KEY_ID }} \
             --private-key=@file:${{ steps.apptstore_private_key.outputs.filePath }} \
+            --certificate-key=@file:$HOME/appstore_signing_cert.key \
             --strict-match-identifier \
             --platform=IOS \
             --type=IOS_APP_STORE \
