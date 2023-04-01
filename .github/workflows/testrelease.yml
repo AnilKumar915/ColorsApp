@@ -31,11 +31,14 @@ jobs:
 
       - name: "Extract version, build number and type"
         run: |
-          echo "TESTING START"
-          echo "NEW_ENV="ABC"" >> $GITHUB_ENV
-          echo "END TESTING"
+          echo "EV_BUILD_VERSION=$(echo $STATIC_VERSION | sed 's/-.*//')" >> $GITHUB_ENV
+          echo "EV_BUILD_NUMBER=$(echo $(expr $EV_BUILD_START_NUMBER + ${{ github.run_number }}))" >> $GITHUB_ENV
+          echo "EV_BUILD_TYPE=$(echo $STATIC_VERSION | sed 's/.*-//')" >> $GITHUB_ENV
       - name: "TEST SCRIPT"
-        run: echo $NEW_ENV
+        run: |
+          echo $EV_BUILD_VERSION
+          echo $EV_BUILD_NUMBER
+          echo $EV_BUILD_TYPE
 
     # - name: Install GitVersion
     #   uses: gittools/actions/gitversion/setup@v0.9.3
