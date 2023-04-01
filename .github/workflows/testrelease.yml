@@ -16,6 +16,7 @@ permissions:
 
 env:
   EV_BUILD_START_NUMBER: 0
+  STATIC_VERSION: 1.0.9-beta
 
 jobs:
   version:
@@ -30,11 +31,10 @@ jobs:
 
       - name: "Extract version, build number and type"
         run: |
-          echo "EV_BUILD_VERSION=$(echo ${{ github.ref_name }} | sed 's/-.*//')" >> $GITHUB_ENV
-          echo "EV_BUILD_NUMBER=$(echo $(expr $EV_BUILD_START_NUMBER + ${{ github.run_number }}))" >> $GITHUB_ENV
-          echo "EV_BUILD_TYPE=$(echo ${{ github.ref_name }} | sed 's/.*-//')" >> $GITHUB_ENV
-          echo "Start number is $(expr $EV_BUILD_START_NUMBER)"
-          echo "Version is $(expr $EV_BUILD_VERSION)"
+          echo "TESTING START"
+          echo "NEW_ENV="ABC"" >> $GITHUB_ENV
+          echo $NEW_ENV
+          echo "END TESTING"
 
     # - name: Install GitVersion
     #   uses: gittools/actions/gitversion/setup@v0.9.3
