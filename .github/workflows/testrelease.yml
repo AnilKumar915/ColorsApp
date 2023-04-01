@@ -1,13 +1,13 @@
 name: testrelease
 
-on:
-  push:
-    tags:
-      - "[0-9]+.[0-9]+.[0-9]+-beta" # eg. 1.2.5-beta
-
 # on:
 #   push:
-#     branches: ["main"]
+#     tags:
+#       - "[0-9]+.[0-9]+.[0-9]+-beta" # eg. 1.2.5-beta
+
+on:
+  push:
+    branches: ["main"]
 
 permissions:
   contents: write
@@ -34,7 +34,7 @@ jobs:
           echo "EV_BUILD_NUMBER=$(echo $(expr $EV_BUILD_START_NUMBER + ${{ github.run_number }}))" >> $GITHUB_ENV
           echo "EV_BUILD_TYPE=$(echo ${{ github.ref_name }} | sed 's/.*-//')" >> $GITHUB_ENV
           echo "Start number is $(expr $EV_BUILD_START_NUMBER)"
-          echo "Version is ${{ env.EV_BUILD_VERSION }}"
+          echo "Version is $(expr $EV_BUILD_VERSION)"
 
     # - name: Install GitVersion
     #   uses: gittools/actions/gitversion/setup@v0.9.3
