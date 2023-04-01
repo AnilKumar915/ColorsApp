@@ -33,9 +33,9 @@ jobs:
           echo "EV_BUILD_VERSION=$(echo ${{ github.ref_name }} | sed 's/-.*//')" >> $GITHUB_ENV
           echo "EV_BUILD_NUMBER=$(echo $(expr $EV_BUILD_START_NUMBER + ${{ github.run_number }}))" >> $GITHUB_ENV
           echo "EV_BUILD_TYPE=$(echo ${{ github.ref_name }} | sed 's/.*-//')" >> $GITHUB_ENV
-          echo "Version is $(env.EV_BUILD_VERSION)"
-          echo "Number is $(env.EV_BUILD_NUMBER)"
-          echo "Type is $(env.EV_BUILD_TYPE)"
+          echo "Version is $(EV_BUILD_VERSION)"
+          echo "Number is $(EV_BUILD_NUMBER)"
+          echo "Type is $(EV_BUILD_TYPE)"
 
     # - name: Install GitVersion
     #   uses: gittools/actions/gitversion/setup@v0.9.3
