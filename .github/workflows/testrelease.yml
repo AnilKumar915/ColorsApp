@@ -79,21 +79,25 @@ jobs:
           fileName: appstore_cert.p12
           encodedString: ${{ secrets.APPSTORE_P12_FILE }}
 
-      - name: "Setup AppStore dependencies"
+      - name: "Extract AppStore P12 Certificate Key"
         run: |
-          keychain initialize
-          app-store-connect fetch-signing-files \
-            --issuer-id=${{ secrets.ES_APPSTORE_ISSUER_ID }} \
-            --key-id=${{ secrets.ES_APPSTORE_KEY_ID }} \
-            --private-key=@file:${{ steps.apptstore_private_key.outputs.filePath }} \
-            --certificate-key=@file:$HOME/appstore_signing_cert.key \
-            --strict-match-identifier \
-            --platform=IOS \
-            --type=IOS_APP_STORE \
-            --create \
-            $(xcode-project detect-bundle-id)
-          keychain add-certificates
-          xcode-project use-profiles
+          openssl pkcs12 -in ${{ steps.apptstore_p12_cert.outputs.filePath }} -nodes -nocerts -passin pass:${{ secrets.ES_APPSTORE_SIGNING_CERT_P12_PASSWORD }} | openssl rsa -out $HOME/appstore_signing_cert.key
+
+      # - name: "Setup AppStore dependencies"
+      #   run: |
+      #     keychain initialize
+      #     app-store-connect fetch-signing-files \
+      #       --issuer-id=${{ secrets.ES_APPSTORE_ISSUER_ID }} \
+      #       --key-id=${{ secrets.ES_APPSTORE_KEY_ID }} \
+      #       --private-key=@file:${{ steps.apptstore_private_key.outputs.filePath }} \
+      #       --certificate-key=@file:$HOME/appstore_signing_cert.key \
+      #       --strict-match-identifier \
+      #       --platform=IOS \
+      #       --type=IOS_APP_STORE \
+      #       --create \
+      #       $(xcode-project detect-bundle-id)
+      #     keychain add-certificates
+      #     xcode-project use-profiles
 
       # - name: "Build iOS release"
       #   run: |
