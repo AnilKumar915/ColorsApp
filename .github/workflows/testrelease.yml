@@ -54,56 +54,56 @@ jobs:
     #   with:
     #     name: gitversion
     #     path: version.txt
-  # build:
-  #   name: Build and Create release
-  #   needs: [version]
-  #   runs-on: macos-12
-  #   steps:
-  #     - uses: actions/checkout@v1
+  build:
+    name: Build and Create release
+    needs: [version]
+    runs-on: macos-12
+    steps:
+      - uses: actions/checkout@v1
 
-  #     - name: "Setup codemagic cli tools"
-  #       run: |
-  #         pip3 install codemagic-cli-tools
+      - name: "Setup codemagic cli tools"
+        run: |
+          pip3 install codemagic-cli-tools
 
-  #     - name: "Download AppStore API private key"
-  #       id: apptstore_private_key
-  #       uses: timheuer/base64-to-file@v1.2
-  #       with:
-  #         fileName: appstore_private.key
-  #         encodedString: ${{ secrets.APPSTORE_PRIVATE_API_KEY }}
+      - name: "Download AppStore API private key"
+        id: apptstore_private_key
+        uses: timheuer/base64-to-file@v1.2
+        with:
+          fileName: appstore_private.key
+          encodedString: ${{ secrets.APPSTORE_PRIVATE_API_KEY }}
 
-  #     - name: "Download AppStore P12 Certificate"
-  #       id: apptstore_p12_cert
-  #       uses: timheuer/base64-to-file@v1.2
-  #       with:
-  #         fileName: appstore_cert.p12
-  #         encodedString: ${{ secrets.APPSTORE_P12_FILE }}
+      - name: "Download AppStore P12 Certificate"
+        id: apptstore_p12_cert
+        uses: timheuer/base64-to-file@v1.2
+        with:
+          fileName: appstore_cert.p12
+          encodedString: ${{ secrets.APPSTORE_P12_FILE }}
 
-  #     - name: "Extract AppStore P12 Certificate Key"
-  #       run: |
-  #         openssl pkcs12 -in ${{ steps.apptstore_p12_cert.outputs.filePath }} -nodes -nocerts -passin pass:${{ secrets.ES_APPSTORE_SIGNING_CERT_P12_PASSWORD }} | openssl rsa -out $HOME/appstore_signing_cert.key
+      - name: "Extract AppStore P12 Certificate Key"
+        run: |
+          openssl pkcs12 -in ${{ steps.apptstore_p12_cert.outputs.filePath }} -nodes -nocerts -passin pass:${{ secrets.ES_APPSTORE_SIGNING_CERT_P12_PASSWORD }} | openssl rsa -out $HOME/appstore_signing_cert.key
 
-  #     - name: "Setup AppStore dependencies"
-  #       run: |
-  #         keychain initialize
-  #         app-store-connect fetch-signing-files \
-  #           --issuer-id=${{ secrets.ES_APPSTORE_ISSUER_ID }} \
-  #           --key-id=${{ secrets.ES_APPSTORE_KEY_ID }} \
-  #           --private-key=@file:${{ steps.apptstore_private_key.outputs.filePath }} \
-  #           --certificate-key=@file:$HOME/appstore_signing_cert.key \
-  #           --strict-match-identifier \
-  #           --platform=IOS \
-  #           --type=IOS_APP_STORE \
-  #           --create \
-  #           $(xcode-project detect-bundle-id)
-  #         keychain add-certificates
-  #         xcode-project use-profiles
+      - name: "Setup AppStore dependencies"
+        run: |
+          keychain initialize
+          app-store-connect fetch-signing-files \
+            --issuer-id=${{ secrets.ES_APPSTORE_ISSUER_ID }} \
+            --key-id=${{ secrets.ES_APPSTORE_KEY_ID }} \
+            --private-key=@file:${{ steps.apptstore_private_key.outputs.filePath }} \
+            --certificate-key=@file:$HOME/appstore_signing_cert.key \
+            --strict-match-identifier \
+            --platform=IOS \
+            --type=IOS_APP_STORE \
+            --create \
+            $(xcode-project detect-bundle-id)
+          keychain add-certificates
+          xcode-project use-profiles
 
-  #     - name: "Build iOS release"
-  #       run: |
-  #         pod repo update
-  #         find . -name "Podfile" -execdir pod install \;
-  #         flutter build ipa --release --build-name=${{ env.EV_BUILD_VERSION }} --build-number=${{ env.EV_BUILD_NUMBER }} --export-options-plist=$HOME/export_options.plist
+      - name: "Build iOS release"
+        run: |
+          pod repo update
+          find . -name "Podfile" -execdir pod install \;
+          flutter build ipa --release --build-name=1.0.9 --build-number=115 --export-options-plist=$HOME/export_options.plist
 
   #     # - name: Get version.txt
   #     #   uses: actions/download-artifact@v2
