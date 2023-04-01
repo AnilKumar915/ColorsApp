@@ -33,8 +33,9 @@ jobs:
         run: |
           echo "TESTING START"
           echo "NEW_ENV="ABC"" >> $GITHUB_ENV
-          echo $NEW_ENV
           echo "END TESTING"
+      - name: "TEST SCRIPT"
+        run: echo $NEW_ENV
 
     # - name: Install GitVersion
     #   uses: gittools/actions/gitversion/setup@v0.9.3
