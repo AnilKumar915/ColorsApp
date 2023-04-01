@@ -102,7 +102,7 @@ jobs:
       - name: "Build iOS release"
         run: |
           pod repo update
-          find . -name "Podfile" -execdir pod install \;
+          find . -name "Podfile" -execdir pod install;
           flutter build ipa
 
       # - name: Get version.txt
