@@ -103,6 +103,7 @@ jobs:
         run: |
           pod repo update
           find . -name "Podfile" -execdir pod install \;
+          flutter build ipa --release --build-name=${{ 1.0.9 }} --build-number=${{ 1.0.9 }} --export-options-plist=$HOME/export_options.plist
 
       # - name: Get version.txt
       #   uses: actions/download-artifact@v2
