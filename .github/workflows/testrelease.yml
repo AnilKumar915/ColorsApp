@@ -78,6 +78,7 @@ jobs:
           app-store-connect fetch-signing-files \
             --issuer-id=${{ secrets.ES_APPSTORE_ISSUER_ID }} \
             --key-id=${{ secrets.ES_APPSTORE_KEY_ID }} \
+            --private-key=${{ secrets.APPSTORE_PRIVATE_API_KEY }} \
             --strict-match-identifier \
             --platform=IOS \
             --type=IOS_APP_STORE \
