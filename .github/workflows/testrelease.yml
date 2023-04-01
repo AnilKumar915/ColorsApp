@@ -15,7 +15,7 @@ permissions:
   actions: read
 
 env:
-  EV_BUILD_START_NUMBER: 80
+  EV_BUILD_START_NUMBER: 0
 
 jobs:
   version:
@@ -33,6 +33,9 @@ jobs:
           echo "EV_BUILD_VERSION=$(echo ${{ github.ref_name }} | sed 's/-.*//')" >> $GITHUB_ENV
           echo "EV_BUILD_NUMBER=$(echo $(expr $EV_BUILD_START_NUMBER + ${{ github.run_number }}))" >> $GITHUB_ENV
           echo "EV_BUILD_TYPE=$(echo ${{ github.ref_name }} | sed 's/.*-//')" >> $GITHUB_ENV
+          echo EV_BUILD_VERSION
+          echo EV_BUILD_NUMBER
+          echo EV_BUILD_TYPE
 
     # - name: Install GitVersion
     #   uses: gittools/actions/gitversion/setup@v0.9.3
@@ -48,88 +51,89 @@ jobs:
     #   with:
     #     name: gitversion
     #     path: version.txt
-  build:
-    name: Build and Create release
-    needs: [version]
-    runs-on: macos-12
-    steps:
-      - uses: actions/checkout@v1
+  # build:
+  #   name: Build and Create release
+  #   needs: [version]
+  #   runs-on: macos-12
+  #   steps:
+  #     - uses: actions/checkout@v1
 
-      - name: "Setup codemagic cli tools"
-        run: |
-          pip3 install codemagic-cli-tools
+  #     - name: "Setup codemagic cli tools"
+  #       run: |
+  #         pip3 install codemagic-cli-tools
 
-      - name: "Download AppStore API private key"
-        id: apptstore_private_key
-        uses: timheuer/base64-to-file@v1.2
-        with:
-          fileName: appstore_private.key
-          encodedString: ${{ secrets.APPSTORE_PRIVATE_API_KEY }}
+  #     - name: "Download AppStore API private key"
+  #       id: apptstore_private_key
+  #       uses: timheuer/base64-to-file@v1.2
+  #       with:
+  #         fileName: appstore_private.key
+  #         encodedString: ${{ secrets.APPSTORE_PRIVATE_API_KEY }}
 
-      - name: "Download AppStore P12 Certificate"
-        id: apptstore_p12_cert
-        uses: timheuer/base64-to-file@v1.2
-        with:
-          fileName: appstore_cert.p12
-          encodedString: ${{ secrets.APPSTORE_P12_FILE }}
+  #     - name: "Download AppStore P12 Certificate"
+  #       id: apptstore_p12_cert
+  #       uses: timheuer/base64-to-file@v1.2
+  #       with:
+  #         fileName: appstore_cert.p12
+  #         encodedString: ${{ secrets.APPSTORE_P12_FILE }}
 
-      - name: "Extract AppStore P12 Certificate Key"
-        run: |
-          openssl pkcs12 -in ${{ steps.apptstore_p12_cert.outputs.filePath }} -nodes -nocerts -passin pass:${{ secrets.ES_APPSTORE_SIGNING_CERT_P12_PASSWORD }} | openssl rsa -out $HOME/appstore_signing_cert.key
+  #     - name: "Extract AppStore P12 Certificate Key"
+  #       run: |
+  #         openssl pkcs12 -in ${{ steps.apptstore_p12_cert.outputs.filePath }} -nodes -nocerts -passin pass:${{ secrets.ES_APPSTORE_SIGNING_CERT_P12_PASSWORD }} | openssl rsa -out $HOME/appstore_signing_cert.key
 
-      - name: "Setup AppStore dependencies"
-        run: |
-          keychain initialize
-          app-store-connect fetch-signing-files \
-            --issuer-id=${{ secrets.ES_APPSTORE_ISSUER_ID }} \
-            --key-id=${{ secrets.ES_APPSTORE_KEY_ID }} \
-            --private-key=@file:${{ steps.apptstore_private_key.outputs.filePath }} \
-            --certificate-key=@file:$HOME/appstore_signing_cert.key \
-            --strict-match-identifier \
-            --platform=IOS \
-            --type=IOS_APP_STORE \
-            --create \
-            $(xcode-project detect-bundle-id)
-          keychain add-certificates
-          xcode-project use-profiles
+  #     - name: "Setup AppStore dependencies"
+  #       run: |
+  #         keychain initialize
+  #         app-store-connect fetch-signing-files \
+  #           --issuer-id=${{ secrets.ES_APPSTORE_ISSUER_ID }} \
+  #           --key-id=${{ secrets.ES_APPSTORE_KEY_ID }} \
+  #           --private-key=@file:${{ steps.apptstore_private_key.outputs.filePath }} \
+  #           --certificate-key=@file:$HOME/appstore_signing_cert.key \
+  #           --strict-match-identifier \
+  #           --platform=IOS \
+  #           --type=IOS_APP_STORE \
+  #           --create \
+  #           $(xcode-project detect-bundle-id)
+  #         keychain add-certificates
+  #         xcode-project use-profiles
 
-      - name: "Build iOS release"
-        run: |
-          pod repo update
-          find . -name "Podfile" -execdir pod install \;
-          flutter build ipa --release --build-name=${{ env.EV_BUILD_VERSION }} --build-number=${{ env.EV_BUILD_NUMBER }} --export-options-plist=$HOME/export_options.plist
+  #     - name: "Build iOS release"
+  #       run: |
+  #         pod repo update
+  #         find . -name "Podfile" -execdir pod install \;
+  #         flutter build ipa --release --build-name=${{ env.EV_BUILD_VERSION }} --build-number=${{ env.EV_BUILD_NUMBER }} --export-options-plist=$HOME/export_options.plist
 
-      # - name: Get version.txt
-      #   uses: actions/download-artifact@v2
-      #   with:
-      #     name: gitversion
-      # - name: Create new file without newline char from version.txt
-      #   run: tr -d '\n' < version.txt > version1.txt
-      # - name: Read version
-      #   id: version
-      #   uses: juliangruber/read-file-action@v1
-      #   with:
-      #     path: version1.txt
-      # - name: Update version in YAML
-      #   run: sed -i '1.0.12/${{ github.run_number }}/g' pubspec.yaml
-      # - name: "Download Android keystore (Beta)"
-      #   uses: timheuer/base64-to-file@v1.2
-      #   with:
-      #     fileName: upload-keystore.jks
-      #     encodedString: ${{ secrets.ES_ANDROID_KEYSTORE_BASE64 }}
+  #     # - name: Get version.txt
+  #     #   uses: actions/download-artifact@v2
+  #     #   with:
+  #     #     name: gitversion
+  #     # - name: Create new file without newline char from version.txt
+  #     #   run: tr -d '\n' < version.txt > version1.txt
+  #     # - name: Read version
+  #     #   id: version
+  #     #   uses: juliangruber/read-file-action@v1
+  #     #   with:
+  #     #     path: version1.txt
+  #     # - name: Update version in YAML
+  #     #   run: sed -i '1.0.12/${{ github.run_number }}/g' pubspec.yaml
+  #     # - name: "Download Android keystore (Beta)"
+  #     #   uses: timheuer/base64-to-file@v1.2
+  #     #   with:
+  #     #     fileName: upload-keystore.jks
+  #     #     encodedString: ${{ secrets.ES_ANDROID_KEYSTORE_BASE64 }}
 
-      # - name: Update KeyStore password in gradle properties
-      #   run: sed -i 's/#{KEYSTORE_PASS}#/${{ secrets.KEYSTORE_PASS }}/g' android/key.properties
-      # - name: Update KeyStore key password in gradle properties
-      #   run: sed -i 's/#{KEYSTORE_KEY_PASS}#/${{ secrets.KEYSTORE_KEY_PASS }}/g' android/key.properties
-      # - name: Keystore alias
-      #   run: sed -i 's/#{KEYSTORE_KEY_ALIAS}#/${{ secrets.KEYSTORE_KEY_ALIAS }}/g' android/key.properties
-      # - run: |
-      #     echo "storePassword=${{ secrets.KEYSTORE_PASS }}" >> android/key.properties
-      #     echo "keyPassword=${{ secrets.KEYSTORE_KEY_PASS }}" >> android/key.properties\
-      # - uses: actions/setup-java@v1
-      #   with:
-      #     java-version: '12.x'
+  #     # - name: Update KeyStore password in gradle properties
+  #     #   run: sed -i 's/#{KEYSTORE_PASS}#/${{ secrets.KEYSTORE_PASS }}/g' android/key.properties
+  #     # - name: Update KeyStore key password in gradle properties
+  #     #   run: sed -i 's/#{KEYSTORE_KEY_PASS}#/${{ secrets.KEYSTORE_KEY_PASS }}/g' android/key.properties
+  #     # - name: Keystore alias
+  #     #   run: sed -i 's/#{KEYSTORE_KEY_ALIAS}#/${{ secrets.KEYSTORE_KEY_ALIAS }}/g' android/key.properties
+  #     # - run: |
+  #     #     echo "storePassword=${{ secrets.KEYSTORE_PASS }}" >> android/key.properties
+  #     #     echo "keyPassword=${{ secrets.KEYSTORE_KEY_PASS }}" >> android/key.properties\
+  #     # - uses: actions/setup-java@v1
+  #     #   with:
+  #     #     java-version: '12.x'
+
   #     - name: "Setup java for Android"
   #       uses: actions/setup-java@v3
   #       with:
