@@ -122,7 +122,7 @@ jobs:
             --issuer-id=${{ secrets.ES_APPSTORE_ISSUER_ID }} \
             --key-id=${{ secrets.ES_APPSTORE_KEY_ID }} \
             --private-key=@file:${{ steps.apptstore_private_key.outputs.filePath }} \
-            --path build/ios/ipa/Colors App.ipa
+            --path /Users/runner/work/ColorsApp/ColorsApp/build/ios/ipa/*.ipa
 
   #     # - name: Get version.txt
   #     #   uses: actions/download-artifact@v2
