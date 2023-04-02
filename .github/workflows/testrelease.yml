@@ -29,17 +29,6 @@ jobs:
           git config remote.origin.url https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}
           git fetch --prune --depth=10000
 
-      - name: "Extract version, build number and type"
-        run: |
-          echo "EV_BUILD_VERSION=$(echo $STATIC_VERSION | sed 's/-.*//')" >> $GITHUB_ENV
-          echo "EV_BUILD_NUMBER=$(echo $(expr $EV_BUILD_START_NUMBER + ${{ github.run_number }}))" >> $GITHUB_ENV
-          echo "EV_BUILD_TYPE=$(echo $STATIC_VERSION | sed 's/.*-//')" >> $GITHUB_ENV
-      - name: "TEST SCRIPT"
-        run: |
-          echo $EV_BUILD_VERSION
-          echo $EV_BUILD_NUMBER
-          echo $EV_BUILD_TYPE
-
     # - name: Install GitVersion
     #   uses: gittools/actions/gitversion/setup@v0.9.3
     #   with:
@@ -60,6 +49,18 @@ jobs:
     runs-on: macos-12
     steps:
       - uses: actions/checkout@v1
+
+      - name: "Extract version, build number and type"
+        run: |
+          echo "EV_BUILD_VERSION=$(echo $STATIC_VERSION | sed 's/-.*//')" >> $GITHUB_ENV
+          echo "EV_BUILD_NUMBER=$(echo $(expr $EV_BUILD_START_NUMBER + ${{ github.run_number }}))" >> $GITHUB_ENV
+          echo "EV_BUILD_TYPE=$(echo $STATIC_VERSION | sed 's/.*-//')" >> $GITHUB_ENV
+
+      - name: "TEST SCRIPT"
+        run: |
+          echo $EV_BUILD_VERSION
+          echo $EV_BUILD_NUMBER
+          echo $EV_BUILD_TYPE
 
       - name: "Setup codemagic cli tools"
         run: |
