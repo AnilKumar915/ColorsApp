@@ -103,9 +103,9 @@ jobs:
         run: |
           pod repo update
           find . -name "Podfile" -execdir pod install \;
-          echo $EV_BUILD_VERSION
-          echo $EV_BUILD_NUMBER
-          echo $EV_BUILD_TYPE
+          echo ${{ env.EV_BUILD_VERSION }}
+          echo ${{ env.EV_BUILD_NUMBER }}
+          echo ${{ env.EV_BUILD_TYPE }}
 
   #     # - name: Get version.txt
   #     #   uses: actions/download-artifact@v2
