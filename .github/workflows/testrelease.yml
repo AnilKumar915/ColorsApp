@@ -21,7 +21,6 @@ env:
 jobs:
   build:
     name: Build & Create release on Play Store & App Store
-    needs: [version]
     runs-on: macos-12
     steps:
       - uses: actions/checkout@v1
