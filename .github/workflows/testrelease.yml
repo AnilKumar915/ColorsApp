@@ -43,18 +43,20 @@ jobs:
           flutter-version: "3.7.3"
           cache: true
 
-      - name: "Download Android keystore (Beta)"
+      - name: "Download Android keystore"
         uses: timheuer/base64-to-file@v1.2
         with:
           fileName: upload-keystore.jks
           encodedString: ${{ secrets.ES_ANDROID_KEYSTORE_BASE64 }}
 
       - name: Update KeyStore password in gradle properties
-        run: sed -i 's/#{KEYSTORE_PASS}#/${{ secrets.KEYSTORE_PASS }}/g' android/key.properties
+        run: sed -i '' 's/#{KEYSTORE_PASS}#/${{ secrets.KEYSTORE_PASS }}/g' android/key.properties
+
       - name: Update KeyStore key password in gradle properties
-        run: sed -i 's/#{KEYSTORE_KEY_PASS}#/${{ secrets.KEYSTORE_KEY_PASS }}/g' android/key.properties
+        run: sed -i '' 's/#{KEYSTORE_KEY_PASS}#/${{ secrets.KEYSTORE_KEY_PASS }}/g' android/key.properties
+
       - name: Keystore alias
-        run: sed -i 's/#{KEYSTORE_KEY_ALIAS}#/${{ secrets.KEYSTORE_KEY_ALIAS }}/g' android/key.properties
+        run: sed -i '' 's/#{KEYSTORE_KEY_ALIAS}#/${{ secrets.KEYSTORE_KEY_ALIAS }}/g' android/key.properties
 
       - name: "Setup java for Android"
         uses: actions/setup-java@v3
@@ -66,7 +68,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: "stable"
-          flutter-version: "3.3.2"
+          flutter-version: "3.3.7"
           cache: true
       - run: flutter clean
       - run: flutter pub get
