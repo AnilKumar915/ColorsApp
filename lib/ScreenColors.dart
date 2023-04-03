@@ -14,22 +14,25 @@ class _ScreenColorsState extends State<ScreenColors> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: colorValue == 0 ? Colors.red : Color.fromARGB(255, 184, 251, 0),
+        color: colorValue == 0 ? Colors.blue : Colors.orange.shade100,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(onPressed: (() {
-                setState(() {
-                  colorValue = 0;  
-                });
-                
-              }), child: const Text("Red")),
-              ElevatedButton(onPressed: (() {
-                setState(() {
-                  colorValue = 1;  
-                });
-              }), child: const Text("Green"))
+              ElevatedButton(
+                  onPressed: (() {
+                    setState(() {
+                      colorValue = 0;
+                    });
+                  }),
+                  child: const Text("Blue")),
+              ElevatedButton(
+                  onPressed: (() {
+                    setState(() {
+                      colorValue = 1;
+                    });
+                  }),
+                  child: const Text("Orange"))
             ],
           ),
         ),
@@ -37,5 +40,3 @@ class _ScreenColorsState extends State<ScreenColors> {
     );
   }
 }
-
-
